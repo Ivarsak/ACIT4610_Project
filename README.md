@@ -4,7 +4,7 @@
  
  Contributins in this project are twofold:
  
- 1) An evolutionary Cellular Automata controller using a genetic algorithm can be found in the folder denoted "CA_controller".
+ 1) An evolutionary Cellular Automata controller using a genetic algorithm can be found in the folder denoted "CA_controller". The main file is "Run_GA.py"
 
 
  2) The second case study investigates Neuroevolution using the NEAT algorithm to evolve a feedforward neural network to control the cart pole. Project code is found in the folder denoted "NEAT_controller folder".
