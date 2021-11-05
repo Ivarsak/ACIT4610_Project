@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[10]:
+# In[1]:
 
 
 import numpy as np
 import random
 import gym
 import matplotlib.pyplot as plt
-from Elementary_CA import rule_index, CA_run
+#from Elementary_CA import rule_index, CA_run
 from time import sleep
 import scipy.integrate as integrate
 from scipy import integrate
@@ -18,7 +18,68 @@ fitness = 0
 fitness_threshold = 500
 
 
-env = gym.make('CartPole-v1')    
+env = gym.make('CartPole-v1')
+
+
+#----------------
+#Cellular Automata
+#----------------
+    
+#Functions for computing elemetary cellular automata
+#The development of the CA functions below originates from:
+#https://matplotlib.org/matplotblog/posts/elementary-cellular-automata/
+
+
+def rule_index(triplet):
+    L, C, R = triplet
+    index = 7 - (4*L + 2*C + R)
+    return int(index)
+
+#CA_run() computes a 1D CA grid
+#Inputs: - Observerd states from the openai gym enviroment, these are encoded to binary values
+#        - Number of steps for the CA to compute
+#        - A vector containing elementary transition rules for each cell, which is evolved by a genetic algorithm
+
+def CA_run(initial_state, n_steps, rule_grid):
+
+    m_cells = len(initial_state)
+    CA_run = np.zeros((n_steps, m_cells))
+    CA_run[0, :] = initial_state
+    
+    grid = rule_grid
+
+    for step in range(1, n_steps):
+        
+        for dx in range(0,m_cells):
+        
+            rule_string = np.binary_repr(int(grid[step][dx]), 8)
+            rule = np.array([int(bit) for bit in rule_string])
+            all_triplets = np.stack(
+                [
+                    np.roll(CA_run[step - 1, :], 1),
+                    CA_run[step - 1, :],
+                    np.roll(CA_run[step - 1, :], -1),
+                ]
+            ) 
+            CA_run[step, :] = rule[np.apply_along_axis(rule_index, 0, all_triplets)]
+            
+            index_max = np.argmax(CA_run[n_steps-1])
+            force_max = CA_run[n_steps-1][index_max]
+        
+            index_min= np.argmin(CA_run[n_steps-1])
+            force_min = CA_run[n_steps-1][index_min]
+        
+            if force_min != force_max:
+                if random.random() >= 0.5:
+                    force_out = 1
+                else:
+                    force_out = 0
+                
+            else:
+                force_out = force_max
+            
+    return force_out
+
 
 #Encoding observations into binary values
 
@@ -28,6 +89,9 @@ def binary(x):
     else:
         return 0
 
+# Running the openAI gym 
+# Inputs: CA rules (s1,s2,s3,s4)
+# Outputs: fitness
 
 def fitness(s1,s2,s3,s4):
     
@@ -50,12 +114,13 @@ def fitness(s1,s2,s3,s4):
                 env.close()  
 
     return delta_t
+
     
-
-
 #--------------------------------------------
              #Genetic Algorithm
 #--------------------------------------------
+
+
 
 def GA(Init, Max_rule, Min_rule, Population, Generation, Mutate_lower, Mutate_upper,Selection_size):
 
@@ -117,6 +182,7 @@ def GA(Init, Max_rule, Min_rule, Population, Generation, Mutate_lower, Mutate_up
             newGen.append((Genome_s1,Genome_s2,Genome_s3,Genome_s4))
 
         Genomes = newGen
+         
         
         
 #-----------------------        
@@ -135,9 +201,14 @@ selectionsize = 10
 last_i = 0
 
 
-#if __name__ == '__Run_GA__':
+#if __name__ == '__CA_Controller__':
     
 GA(Init_pop, rule_upperlimit,rule_lowerlimit, Pop, Gen, Mut_lowerlimit, Mut_upperlimit, selectionsize)
     
+    
+
+
+
+
 
 
