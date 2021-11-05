@@ -139,17 +139,5 @@ last_i = 0
     
 GA(Init_pop, rule_upperlimit,rule_lowerlimit, Pop, Gen, Mut_lowerlimit, Mut_upperlimit, selectionsize)
     
-    
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
 
 
