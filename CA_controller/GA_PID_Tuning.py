@@ -31,6 +31,7 @@ best_gen = []
 #--------------------------------------------
 #calulate control Law + fitness/cost function
 #--------------------------------------------
+# The PID controller below originates from the code in: https://gist.github.com/HenryJia/23db12d61546054aa43f8dc587d9dc2c
 
 def fitness(Kp,Ki,Kd):
     
@@ -67,7 +68,7 @@ def fitness(Kp,Ki,Kd):
 #--------------------------------------------
              #Genetic Algorithm
 #--------------------------------------------
-
+#The code presented in https://www.youtube.com/watch?v=4XZoVQOt-0I was used as inspiration for the GA presented below
 
 
 def GA(Init, Population, Generation, Mutate_lower, Mutate_upper,Selection_size):

@@ -120,7 +120,7 @@ def fitness(s1,s2,s3,s4):
              #Genetic Algorithm
 #--------------------------------------------
 
-
+#The code presented in https://www.youtube.com/watch?v=4XZoVQOt-0I was used as inspiration for the GA below
 
 def GA(Init, Max_rule, Min_rule, Population, Generation, Mutate_lower, Mutate_upper,Selection_size):
 
